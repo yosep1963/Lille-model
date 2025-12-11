@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(where:*)",
+      "Bash(node generate-icons.js:*)",
+      "Bash(del \"d:\\Claude_workplace\\Lille score\\nul\")",
+      "Bash(node test-calculation.js:*)",
+      "Bash(npx serve:*)",
+      "Bash(timeout /t 5 /nobreak)",
+      "Bash(node -e:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+{
+    "name": "Lille Score 계산기",
+    "short_name": "Lille Score",
+    "description": "중증 알코올성 간염 환자의 스테로이드 치료 반응을 평가하는 Lille Score 계산기",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#f1f5f9",
+    "theme_color": "#2563eb",
+    "orientation": "portrait-primary",
+    "scope": "/",
+    "lang": "ko",
+    "icons": [
+        {
+            "src": "icons/icon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        },
+        {
+            "src": "icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "categories": ["medical", "health", "utilities"]
+}

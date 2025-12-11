@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="중증 알코올성 간염 환자의 스테로이드 치료 반응을 평가하는 Lille Score 계산기">
+    <meta name="theme-color" content="#2563eb">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Lille Score">
+
+    <title>Lille Score 계산기</title>
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Lille Score 계산기</h1>
+            <p class="subtitle">중증 알코올성 간염 - 스테로이드 치료 반응 평가</p>
+        </header>
+
+        <main>
+            <form id="lilleForm" class="calculator-form">
+                <div class="input-group">
+                    <label for="age">나이</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="age" name="age"
+                               placeholder="예: 45"
+                               min="18" max="120" step="1" required>
+                        <span class="unit">세</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="albumin">알부민 (Day 0)</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="albumin" name="albumin"
+                               placeholder="예: 2.5"
+                               min="0.1" max="100" step="0.01" required>
+                        <select id="albuminUnit" class="unit-select">
+                            <option value="g/dL">g/dL</option>
+                            <option value="g/L">g/L</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="bilirubinDay0">빌리루빈 (Day 0)</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="bilirubinDay0" name="bilirubinDay0"
+                               placeholder="예: 15.0"
+                               min="0.1" max="2000" step="0.01" required>
+                        <select id="bilirubinDay0Unit" class="unit-select">
+                            <option value="mg/dL">mg/dL</option>
+                            <option value="μmol/L">μmol/L</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="bilirubinDay7">빌리루빈 (Day 7)</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="bilirubinDay7" name="bilirubinDay7"
+                               placeholder="예: 10.0"
+                               min="0.1" max="2000" step="0.01" required>
+                        <select id="bilirubinDay7Unit" class="unit-select">
+                            <option value="mg/dL">mg/dL</option>
+                            <option value="μmol/L">μmol/L</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="creatinine">크레아티닌</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="creatinine" name="creatinine"
+                               placeholder="예: 1.05"
+                               min="0.1" max="2000" step="0.01" required>
+                        <select id="creatinineUnit" class="unit-select">
+                            <option value="mg/dL">mg/dL</option>
+                            <option value="μmol/L">μmol/L</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="pt">PT (Prothrombin Time)</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="pt" name="pt"
+                               placeholder="예: 25"
+                               min="5" max="100" step="0.1" required>
+                        <span class="unit">초</span>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary">계산하기</button>
+                    <button type="button" class="btn btn-secondary" id="resetBtn">초기화</button>
+                </div>
+            </form>
+
+            <section id="resultSection" class="result-section hidden">
+                <h2>계산 결과</h2>
+
+                <div class="score-display">
+                    <span class="score-label">Lille Score</span>
+                    <span class="score-value" id="lilleScore">-</span>
+                </div>
+
+                <div class="result-card" id="binaryResult">
+                    <h3>0.45 기준 (이분법)</h3>
+                    <div class="result-badge" id="binaryBadge">-</div>
+                    <p class="result-description" id="binaryDescription"></p>
+                </div>
+
+                <div class="result-card" id="ternaryResult">
+                    <h3>0.16 / 0.56 기준 (삼분법)</h3>
+                    <div class="result-badge" id="ternaryBadge">-</div>
+                    <p class="result-description" id="ternaryDescription"></p>
+                </div>
+
+                <div class="clinical-info">
+                    <h3>임상적 의의</h3>
+                    <p id="clinicalDescription"></p>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="info-section">
+                <h4>Lille Score란?</h4>
+                <p>Lille Score는 중증 알코올성 간염 환자에서 코르티코스테로이드 치료 시작 7일 후 치료 반응을 평가하는 예후 모델입니다.</p>
+            </div>
+            <div class="reference">
+                <p><strong>참고문헌:</strong> Louvet A, et al. The Lille model: a new tool for therapeutic strategy in patients with severe alcoholic hepatitis treated with steroids. Hepatology 2007;45:1348-54.</p>
+            </div>
+            <div class="disclaimer">
+                <p>이 계산기는 참고용이며 임상적 판단을 대체하지 않습니다. 반드시 전문 의료진과 상담하세요.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
