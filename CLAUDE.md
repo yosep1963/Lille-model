@@ -12,16 +12,21 @@ Lille Score 계산기 - 중증 알코올성 간염 환자의 코르티코스테�
 # 로컬 서버 실행
 npx serve -l 3000
 
-# Netlify CLI 배포
+# 배포 폴더(dist/) 갱신 - 루트 소스 수정 후 반드시 실행
+rm -rf dist/*.html dist/*.js dist/*.css dist/*.json dist/icons && mkdir -p dist/icons && cp index.html script.js styles.css sw.js manifest.json dist/ && cp icons/* dist/icons/
+
+# Netlify CLI 배포 (netlify.toml의 publish = "dist")
 netlify deploy --prod
 ```
+
+- `dist/`는 루트 소스의 복사본 + `_headers`(sw.js/index.html no-cache). 소스는 루트에서만 수정할 것
 
 ## Architecture
 
 **Pure Vanilla Stack** - 빌드 도구 없이 HTML/CSS/JS만 사용
 
 - `index.html` - 메인 페이지, 입력 폼 6개 필드 (나이, 알부민, 빌리루빈 Day0/Day7, 크레아티닌, PT)
-- `script.js` - Lille Score 계산 로직 (SI 단위 공식 사용)
+- `script.js` - Lille Score 계산 로직 (입력을 즉시 SI 단위로 정규화 → SI 공식, 단위별 범위 검증). Node에서 `require('./script.js')`로 함수 테스트 가능
 - `styles.css` - 반응형 디자인, 다크모드 지원
 - `sw.js` - Service Worker (Cache First 전략, 오프라인 지원)
 - `manifest.json` - PWA 매니페스트
@@ -48,7 +53,9 @@ Lille Score = exp(-R) / (1 + exp(-R))
 ## Result Interpretation
 
 - **0.45 기준 (이분법)**: Responder (< 0.45, 6개월 생존율 ~85%) / Non-responder (≥ 0.45, ~25%)
-- **0.16/0.56 기준 (삼분법)**: Complete / Partial / Null responder
+- **0.16/0.56 기준 (삼분법, Mathurin Gut 2011)**: Complete (≤ 0.16, 28일 생존율 ~91%) / Partial (0.16 초과 ~ 0.56 미만, ~79%) / Null (≥ 0.56, ~53%)
+- 판정은 화면 표시값(소수점 3자리 반올림)으로 수행 → 표시 점수와 판정이 경계에서 일치
+- 신부전 판정은 사용자가 입력한 단위의 기준값으로 직접 비교 (단위 변환 후 비교 금지)
 
 ## Cache Versioning
 

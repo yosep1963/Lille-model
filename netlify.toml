@@ -1,0 +1,3 @@
+# Netlify 배포 설정 - dist 폴더를 그대로 배포 (빌드 단계 없음)
+[build]
+  publish = "dist"
